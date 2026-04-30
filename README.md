@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/OpenListTeam/Logo/main/logo.svg" width="128" height="128" alt="logo" />
 
-  <p><em>OpenList is a resilient, long-term governance, community-driven fork of AList — built to defend open source against trust-based attacks.</em></p>
+  <p><em>OpenList 是一个有韧性、长期治理、社区驱动的 AList 分支，旨在防御基于信任的开源攻击。</em></p>
 
   <img src="https://goreportcard.com/badge/github.com/OpenListTeam/OpenList/v3" alt="latest version" />
   <a href="https://github.com/OpenListTeam/OpenList/blob/main/LICENSE"><img src="https://img.shields.io/github/license/OpenListTeam/OpenList" alt="License" /></a>
@@ -14,151 +14,198 @@
 
 ---
 
-- English | [中文](./README_cn.md) | [日本語](./README_ja.md) | [Dutch](./README_nl.md)
+- [English](./README.md) | 中文 | [日本語](./README_ja.md) | [Dutch](./README_nl.md)
 
-- [Contributing](./CONTRIBUTING.md)
-- [CODE OF CONDUCT](./CODE_OF_CONDUCT.md)
-- [LICENSE](./LICENSE)
+- [贡献指南](./CONTRIBUTING.md)
+- [行为准则](./CODE_OF_CONDUCT.md)
+- [许可证](./LICENSE)
 
-## Disclaimer
+## 关于本分支（Lite 版本）
 
-OpenList is an open-source project independently maintained by the OpenList Team, following the AGPL-3.0 license and committed to maintaining complete code openness and modification transparency.
+> 本仓库是 [OpenListTeam/OpenList](https://github.com/OpenListTeam/OpenList) 的精简分支，专为**存储空间有限的设备**（如低配 NAS、嵌入式设备、路由器等）优化，大幅缩减二进制体积。
 
-We have noticed the emergence of some third-party projects in the community with names similar to this project, such as OpenListApp/OpenListApp, as well as some paid proprietary software using the same or similar naming. To avoid user confusion, we hereby declare:
+### 精简内容
 
-- OpenList has no official association with any third-party derivative projects.
+**仅保留以下存储驱动：**
 
-- All software, code, and services of this project are maintained by the OpenList Team and are freely available on GitHub.
+| 驱动 | 说明 |
+|------|------|
+| `local` | 本地文件系统 |
+| `ftp` | FTP / SFTP 协议 |
+| `webdav` | WebDAV 协议 |
+| `smb` | SMB / CIFS 网络共享 |
+| `quark_open` | 夸克网盘（Open API） |
+| `quark_uc` | 夸克 / UC 网盘 |
+| `quark_uc_tv` | 夸克 / UC TV 版 |
+| `openlist` | OpenList 远程挂载 |
+| `openlist_share` | OpenList 分享链接 |
 
-- Project documentation and API services primarily rely on charitable resources provided by Cloudflare. There are currently no paid plans or commercial deployments, and the use of existing features does not involve any costs.
+**计划移除的重型组件：**
 
-We respect the community's rights to free use and derivative development, but we also strongly urge downstream projects:
+- ❌ 60+ 个第三方云盘驱动（阿里云盘、百度网盘、OneDrive 等）
+- ❌ 离线下载功能（Aria2 / qBittorrent / Transmission）
+- ❌ FFmpeg 视频缩略图支持
+- ❌ Bleve / Meilisearch 全文搜索引擎（保留轻量 DB 搜索）
+- ❌ HTTP/3 (QUIC) 协议支持
+- ❌ WebAuthn 硬件密钥登录
+- ❌ MySQL / PostgreSQL 数据库支持（仅保留 SQLite）
 
-- Should not use the "OpenList" name for impersonation promotion or commercial gain;
+### 体积对比
 
-- Must not distribute OpenList-based code in a closed-source manner or violate AGPL license terms.
+| 版本 | 二进制大小（Linux amd64，`-s -w`）|
+|------|----------------------------------|
+| 原版 OpenList-lite | ~79.0M |
+| **Lite 本分支** | **~57.4M** |
 
-To better maintain healthy ecosystem development, we recommend:
+### 使用说明
 
-- Clearly indicate the project source and choose appropriate open-source licenses in accordance with the open-source spirit;
+直接使用原版 OpenList 的使用方式即可，配置文件、API 完全兼容。由于移除了部分功能，以下行为有所不同：
 
-- If involving commercial use, please avoid using "OpenList" or any confusing naming as the project name;
+- **搜索**：仅支持 `database` 和 `database_non_full_text` 两种搜索模式
+- **数据库**：仅支持 SQLite3（默认），不支持 MySQL / PostgreSQL
+- **存储**：仅以上列出的驱动可用，添加其他类型存储将提示不支持
 
-- If you need to use materials located under OpenListTeam/Logo, you may modify and use them under compliance with the agreement.
+---
 
-Thank you for your support and understanding of the OpenList project.
+## 免责声明
 
-## Features
+OpenList 是一个由 OpenList 团队独立维护的开源项目，遵循 AGPL-3.0 许可证，致力于保持完整的代码开放性和修改透明性。
 
-- [x] Multiple storages
-  - [x] Local storage
-  - [x] [Aliyundrive](https://www.alipan.com)
-  - [x] OneDrive / Sharepoint ([Global](https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage), [CN](https://portal.partner.microsoftonline.cn), DE, US)
-  - [x] [189cloud](https://cloud.189.cn) (Personal, Family)
+我们注意到社区中出现了一些与本项目名称相似的第三方项目，如 OpenListApp/OpenListApp，以及部分采用相同或近似命名的收费专有软件。为避免用户误解，现声明如下：
+
+- OpenList 与任何第三方衍生项目无官方关联。
+
+- 本项目的全部软件、代码与服务由 OpenList 团队维护，可在 GitHub 免费获取。
+
+- 项目文档与 API 服务均主要依托于 Cloudflare 提供的公益资源，目前无任何收费计划或商业部署，现有功能使用不涉及任何支出。
+
+我们尊重社区的自由使用与衍生开发权利，但也强烈呼吁下游项目：
+
+- 不应以“OpenList”名义进行冒名宣传或获取商业利益；
+
+- 不得将基于 OpenList 的代码进行闭源分发或违反 AGPL 许可证条款。
+
+为了更好地维护生态健康发展，我们建议：
+
+- 明确注明项目来源，并以符合开源精神的方式选择适当的开源许可证；
+
+- 如涉及商业用途，请避免使用“OpenList”或任何会产生混淆的方式作为项目名称；
+
+- 若需使用本项目位于 OpenListTeam/Logo 下的素材，可在遵守协议的前提下进行修改后使用。
+
+感谢您对 OpenList 项目的支持与理解。
+
+## 功能
+
+- [x] 多种存储
+  - [x] 本地存储
+  - [x] [阿里云盘](https://www.alipan.com)
+  - [x] OneDrive / Sharepoint ([国际版](https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage), [中国](https://portal.partner.microsoftonline.cn), DE, US)
+  - [x] [天翼云盘](https://cloud.189.cn)（个人、家庭）
   - [x] [GoogleDrive](https://drive.google.com)
-  - [x] [123pan](https://www.123pan.com)
+  - [x] [123云盘](https://www.123pan.com)
   - [x] [FTP / SFTP](https://en.wikipedia.org/wiki/File_Transfer_Protocol)
   - [x] [PikPak](https://www.mypikpak.com)
   - [x] [S3](https://aws.amazon.com/s3)
   - [x] [Seafile](https://seafile.com)
-  - [x] [UPYUN Storage Service](https://www.upyun.com/products/file-storage)
+  - [x] [又拍云对象存储](https://www.upyun.com/products/file-storage)
   - [x] [WebDAV](https://en.wikipedia.org/wiki/WebDAV)
-  - [x] Teambition([China](https://www.teambition.com), [International](https://us.teambition.com))
+  - [x] Teambition([中国](https://www.teambition.com), [国际](https://us.teambition.com))
   - [x] [MediaFire](https://www.mediafire.com)
-  - [x] [Mediatrack](https://www.mediatrack.cn)
+  - [x] [分秒帧](https://www.mediatrack.cn)
   - [x] [ProtonDrive](https://proton.me/drive)
-  - [x] [139yun](https://yun.139.com) (Personal, Family, Group)
+  - [x] [和彩云](https://yun.139.com)（个人、家庭、群组）
   - [x] [YandexDisk](https://disk.yandex.com)
-  - [x] [BaiduNetdisk](http://pan.baidu.com)
+  - [x] [百度网盘](http://pan.baidu.com)
   - [x] [Terabox](https://www.terabox.com/main)
-  - [x] [UC](https://drive.uc.cn)
-  - [x] [Quark](https://pan.quark.cn)
-  - [x] [Thunder](https://pan.xunlei.com)
-  - [x] [Lanzou](https://www.lanzou.com)
-  - [x] [ILanzou](https://www.ilanzou.com)
-  - [x] [Google photo](https://photos.google.com)
+  - [x] [UC网盘](https://drive.uc.cn)
+  - [x] [夸克网盘](https://pan.quark.cn)
+  - [x] [迅雷网盘](https://pan.xunlei.com)
+  - [x] [蓝奏云](https://www.lanzou.com)
+  - [x] [蓝奏云优享版](https://www.ilanzou.com)
+  - [x] [Google 相册](https://photos.google.com)
   - [x] [Mega.nz](https://mega.nz)
-  - [x] [Baidu photo](https://photo.baidu.com)
+  - [x] [百度相册](https://photo.baidu.com)
   - [x] [SMB](https://en.wikipedia.org/wiki/Server_Message_Block)
   - [x] [115](https://115.com)
-  - [X] [Cloudreve](https://cloudreve.org)
+  - [x] [Cloudreve](https://cloudreve.org)
   - [x] [Dropbox](https://www.dropbox.com)
-  - [x] [FeijiPan](https://www.feijipan.com)
-  - [x] [dogecloud](https://www.dogecloud.com/product/oss)
+  - [x] [飞机盘](https://www.feijipan.com)
+  - [x] [多吉云](https://www.dogecloud.com/product/oss)
   - [x] [Azure Blob Storage](https://azure.microsoft.com/products/storage/blobs)
-  - [x] [Chaoxing](https://www.chaoxing.com)
+  - [x] [超星](https://www.chaoxing.com)
   - [x] [CNB](https://cnb.cool/)
   - [x] [Degoo](https://degoo.com)
-  - [x] [Doubao](https://www.doubao.com)
+  - [x] [豆包](https://www.doubao.com)
   - [x] [Febbox](https://www.febbox.com)
   - [x] [GitHub](https://github.com)
   - [x] [OpenList](https://github.com/OpenListTeam/OpenList)
   - [x] [Teldrive](https://github.com/tgdrive/teldrive)
-  - [x] [Weiyun](https://www.weiyun.com)
-- [x] Easy to deploy and out-of-the-box
-- [x] File preview (PDF, markdown, code, plain text, ...)
-- [x] Image preview in gallery mode
-- [x] Video and audio preview, support lyrics and subtitles
-- [x] Office documents preview (docx, pptx, xlsx, ...)
-- [x] `README.md` preview rendering
-- [x] File permalink copy and direct file download
-- [x] Dark mode
-- [x] I18n
-- [x] Protected routes (password protection and authentication)
+  - [x] [微云](https://www.weiyun.com)
+- [x] 部署方便，开箱即用
+- [x] 文件预览（PDF、markdown、代码、纯文本等）
+- [x] 画廊模式下的图片预览
+- [x] 视频和音频预览，支持歌词和字幕
+- [x] Office 文档预览（docx、pptx、xlsx 等）
+- [x] `README.md` 预览渲染
+- [x] 文件永久链接复制和直接文件下载
+- [x] 黑暗模式
+- [x] 国际化
+- [x] 受保护的路由（密码保护和认证）
 - [x] WebDAV
-- [x] Docker Deploy
-- [x] Cloudflare Workers proxy
-- [x] File/Folder package download
-- [x] Web upload(Can allow visitors to upload), delete, mkdir, rename, move and copy
-- [x] Offline download
-- [x] Copy files between two storage
-- [x] Multi-thread downloading acceleration for single-thread download/stream
+- [x] Docker 部署
+- [x] Cloudflare Workers 代理
+- [x] 文件/文件夹打包下载
+- [x] 网页上传（可允许访客上传）、删除、新建文件夹、重命名、移动和复制
+- [x] 离线下载
+- [x] 跨存储复制文件
+- [x] 单文件多线程下载/流式加速
 
-## Document
+## 文档
 
-- 📘 [Global Site](https://doc.oplist.org)
-- 📚 [Backup Site](https://doc.openlist.team)
-- 🌏 [CN Site](https://doc.oplist.org.cn)
+- 🌏 [国内站点](https://doc.oplist.org.cn)
+- 📘 [海外站点](https://doc.oplist.org)
+- 📚 [备用站点](https://doc.openlist.team)
 
-## Demo
+## 演示
 
-- 🌎 [Global Demo](https://demo.oplist.org)
-- 🇨🇳 [CN Demo](https://demo.oplist.org.cn)
+- 🇨🇳 [国内演示站](https://demo.oplist.org.cn)
+- 🌎 [海外演示站](https://demo.oplist.org)
 
-## Discussion
+## 讨论
 
-Please refer to [*Discussions*](https://github.com/OpenListTeam/OpenList/discussions) for raising general questions, ***Issues* is for bug reports and feature requests only.**
+如有一般性问题请前往 [*Discussions*](https://github.com/OpenListTeam/OpenList/discussions) 讨论区，***Issues* 仅用于错误报告和功能请求。**
 
-## Sponsor
+## 赞助者
 
 [![VPS.Town](https://vps.town/static/images/sponsor.png)](https://vps.town "VPS.Town - Trust, Effortlessly. Your Cloud, Reimagined.")
 
-## License
+## 许可证
 
-The `OpenList` is open-source software licensed under the [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.txt) license.
+`OpenList` 是基于 [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.txt) 许可证的开源软件。
 
-## Disclaimer
+## 免责声明
 
-- This project is a free and open-source software designed to facilitate file sharing via net disks, primarily intended to support the downloading and learning of the Go programming language.
-- Please comply with all applicable laws and regulations when using this software. Any form of misuse is strictly prohibited.
-- The software is based on official SDKs or APIs without any modification, disruption, or interference with their behavior.
-- It only performs HTTP 302 redirects or traffic forwarding, and does not intercept, store, or tamper with any user data.
-- This project is not affiliated with any official platform or service provider.
-- The software is provided "as is", without any warranties of any kind, either express or implied, including but not limited to warranties of merchantability or fitness for a particular purpose.
-- The maintainers are not liable for any direct or indirect damages arising from the use of, or inability to use, this software.
-- You are solely responsible for any risks associated with using this software, including but not limited to account bans or download speed limitations.
-- This project is licensed under the [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.txt) License. Please see the [LICENSE](./LICENSE) file for details.
+- 本项目为免费开源软件，旨在通过网盘便捷分享文件，主要用于 Go 语言的下载与学习。
+- 使用本软件时请遵守相关法律法规，严禁任何形式的滥用。
+- 本软件基于官方 SDK 或 API 实现，未对其行为进行任何修改、破坏或干扰。
+- 仅进行 HTTP 302 跳转或流量转发，不拦截、存储或篡改任何用户数据。
+- 本项目与任何官方平台或服务提供商无关。
+- 本软件按“原样”提供，不附带任何明示或暗示的担保，包括但不限于适销性或特定用途的适用性。
+- 维护者不对因使用或无法使用本软件而导致的任何直接或间接损失负责。
+- 您需自行承担使用本软件的所有风险，包括但不限于账号被封、下载限速等。
+- 本项目遵循 [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.txt) 许可证，详情请参见 [LICENSE](./LICENSE) 文件。
 
-## Contact Us
+## 联系我们
 
 - [@GitHub](https://github.com/OpenListTeam)
-- [Telegram Group](https://t.me/OpenListTeam)
-- [Telegram Channel](https://t.me/OpenListOfficial)
+- [Telegram 交流群](https://t.me/OpenListTeam)
+- [Telegram 频道](https://t.me/OpenListOfficial)
 
-## Contributors
+## 贡献者
 
-We sincerely thank the author [Xhofe](https://github.com/Xhofe) of the original project [AlistGo/alist](https://github.com/AlistGo/alist) and all other contributors.
+我们衷心感谢原项目 [AlistGo/alist](https://github.com/AlistGo/alist) 的作者 [Xhofe](https://github.com/Xhofe) 及所有其他贡献者。
 
-Thanks goes to these wonderful people:
+感谢这些优秀的人：
 
 [![Contributors](https://contrib.rocks/image?repo=OpenListTeam/OpenList)](https://github.com/OpenListTeam/OpenList/graphs/contributors)
