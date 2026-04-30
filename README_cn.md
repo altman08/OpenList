@@ -20,6 +20,53 @@
 - [行为准则](./CODE_OF_CONDUCT.md)
 - [许可证](./LICENSE)
 
+## 关于本分支（Lite 版本）
+
+> 本仓库是 [OpenListTeam/OpenList](https://github.com/OpenListTeam/OpenList) 的精简分支，专为**存储空间有限的设备**（如低配 NAS、嵌入式设备、路由器等）优化，大幅缩减二进制体积。
+
+### 精简内容
+
+**仅保留以下存储驱动：**
+
+| 驱动 | 说明 |
+|------|------|
+| `local` | 本地文件系统 |
+| `ftp` | FTP / SFTP 协议 |
+| `webdav` | WebDAV 协议 |
+| `smb` | SMB / CIFS 网络共享 |
+| `quark_open` | 夸克网盘（Open API） |
+| `quark_uc` | 夸克 / UC 网盘 |
+| `quark_uc_tv` | 夸克 / UC TV 版 |
+| `openlist` | OpenList 远程挂载 |
+| `openlist_share` | OpenList 分享链接 |
+
+**计划移除的重型组件：**
+
+- ❌ 60+ 个第三方云盘驱动（阿里云盘、百度网盘、OneDrive 等）
+- ❌ 离线下载功能（Aria2 / qBittorrent / Transmission）
+- ❌ FFmpeg 视频缩略图支持
+- ❌ Bleve / Meilisearch 全文搜索引擎（保留轻量 DB 搜索）
+- ❌ HTTP/3 (QUIC) 协议支持
+- ❌ WebAuthn 硬件密钥登录
+- ❌ MySQL / PostgreSQL 数据库支持（仅保留 SQLite）
+
+### 体积对比
+
+| 版本 | 二进制大小（Linux amd64，`-s -w`）|
+|------|----------------------------------|
+| 原版 OpenList | ~148 MB |
+| **Lite 本分支** | **~111 MB** |
+
+### 使用说明
+
+直接使用原版 OpenList 的使用方式即可，配置文件、API 完全兼容。由于移除了部分功能，以下行为有所不同：
+
+- **搜索**：仅支持 `database` 和 `database_non_full_text` 两种搜索模式
+- **数据库**：仅支持 SQLite3（默认），不支持 MySQL / PostgreSQL
+- **存储**：仅以上列出的驱动可用，添加其他类型存储将提示不支持
+
+---
+
 ## 免责声明
 
 OpenList 是一个由 OpenList 团队独立维护的开源项目，遵循 AGPL-3.0 许可证，致力于保持完整的代码开放性和修改透明性。
