@@ -98,6 +98,7 @@ func Init(e *gin.Engine) {
 	// no need auth
 	public := api.Group("/public")
 	public.Any("/settings", handles.PublicSettings)
+	public.Any("/offline_download_tools", handles.OfflineDownloadTools)
 	public.Any("/archive_extensions", handles.ArchiveExtensions)
 
 	_fs(auth.Group("/fs"))
@@ -154,6 +155,18 @@ func admin(g *gin.RouterGroup) {
 	setting.POST("/delete", handles.DeleteSetting)
 	setting.POST("/default", handles.DefaultSettings)
 	setting.POST("/reset_token", handles.ResetToken)
+	setting.POST("/set_aria2", handles.SetAria2)
+	setting.POST("/set_qbit", handles.SetQbittorrent)
+	setting.POST("/set_transmission", handles.SetTransmission)
+	setting.POST("/set_115", handles.Set115)
+	setting.POST("/set_115_open", handles.Set115Open)
+	setting.POST("/set_123_pan", handles.Set123Pan)
+	setting.POST("/set_123_open", handles.Set123Open)
+	setting.POST("/set_pikpak", handles.SetPikPak)
+	setting.POST("/set_thunder", handles.SetThunder)
+	setting.POST("/set_thunderx", handles.SetThunderX)
+	setting.POST("/set_thunder_browser", handles.SetThunderBrowser)
+
 	// retain /admin/task API to ensure compatibility with legacy automation scripts
 	_task(g.Group("/task"))
 
@@ -199,6 +212,10 @@ func _fs(g *gin.RouterGroup) {
 	g.PUT("/put", middlewares.FsUp, uploadLimiter, handles.FsStream)
 	g.PUT("/form", middlewares.FsUp, uploadLimiter, handles.FsForm)
 	g.POST("/link", middlewares.AuthAdmin, handles.Link)
+	// g.POST("/add_aria2", handles.AddOfflineDownload)
+	// g.POST("/add_qbit", handles.AddQbittorrent)
+	// g.POST("/add_transmission", handles.SetTransmission)
+	g.POST("/add_offline_download", handles.AddOfflineDownload)
 	g.POST("/archive/decompress", handles.FsArchiveDecompress)
 	// Direct upload (client-side upload to storage)
 	g.POST("/get_direct_upload_info", middlewares.FsUp, handles.FsGetDirectUploadInfo)

@@ -89,6 +89,7 @@ func Start() {
 		utils.Log.Infof("delayed start for %d seconds", conf.Conf.DelayedStart)
 		time.Sleep(time.Duration(conf.Conf.DelayedStart) * time.Second)
 	}
+	InitOfflineDownloadTools()
 	LoadStorages()
 	InitTaskManager()
 	if !flags.Debug && !flags.Dev {
