@@ -14,13 +14,8 @@ jobs:
     strategy:
       matrix:
         target:
-          - darwin-amd64
-          - darwin-arm64
-          - windows-amd64
-          - linux-arm64-musl
-          - linux-amd64-musl
-          - windows-arm64
-          - android-arm64
+          - linux-arm64
+          - linux-arm-7
     name: Build ${{ matrix.target }}
     runs-on: ubuntu-latest
     steps:
@@ -45,9 +40,7 @@ jobs:
         uses: OpenListTeam/cgo-actions@v1.2.5
         with:
           targets: ${{ matrix.target }}
-          flags: ${{ contains(matrix.target, '-musl') && '-ldflags=-linkmode external -extldflags ''-static -fpic''' || '-ldflags=' }}
-          static-link-for-musl: true
-          musl-target-format: $os-$musl-$arch
+          flags: -ldflags=
           github-token: ${{ secrets.GITHUB_TOKEN }}
           out-dir: build
           x-flags: |
@@ -57,16 +50,6 @@ jobs:
             github.com/OpenListTeam/OpenList/v4/internal/conf.Version=$tag
             github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=rolling
           output: openlist$ext
-
-      - name: Verify musl binary is static
-        if: contains(matrix.target, '-musl')
-        run: |
-          set -e
-          if readelf -l build/openlist | grep -q "Requesting program interpreter"; then
-            echo "Dynamic binary detected: build/openlist"
-            readelf -l build/openlist | grep "Requesting program interpreter" || true
-            exit 1
-          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7

@@ -20,28 +20,15 @@ jobs:
           id: ${{ github.event.release.id }}
           prerelease: true
 
-  # Main release job for all platforms
+  # Main release job (linux/arm64 and linux/arm-7 only)
   release:
     needs: prerelease
     strategy:
       matrix:
         build-type: [ 'standard', 'lite' ]
-        target-platform: [ '', 'android', 'freebsd', 'linux_musl', 'linux_musl_arm' ]
-    name: Release ${{ matrix.target-platform && format('{0} ', matrix.target-platform) || '' }}${{ matrix.build-type == 'lite' && 'Lite' || '' }}
+    name: Release ${{ matrix.build-type == 'lite' && 'Lite' || '' }}
     runs-on: ubuntu-latest
     steps:
-
-      - name: Free Disk Space (Ubuntu)
-        if: matrix.target-platform == ''
-        uses: jlumbroso/free-disk-space@main
-        with:
-          tool-cache: false
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
 
       - name: Setup Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
@@ -55,7 +42,6 @@ jobs:
           fetch-tags: true
 
       - name: Install dependencies
-        if: matrix.target-platform == ''
         run: |
           sudo snap install zig --classic --beta
           # Pin xgo image to the digest used on 2026-04-30 to avoid glibc version
@@ -64,11 +50,10 @@ jobs:
           docker tag ghcr.io/crazy-max/xgo@sha256:9897d31ff8051296e267b582ab168c903f5bcade8a5bad4879e6e16071d67500 ghcr.io/crazy-max/xgo:latest
           docker tag ghcr.io/crazy-max/xgo@sha256:9897d31ff8051296e267b582ab168c903f5bcade8a5bad4879e6e16071d67500 crazymax/xgo:latest
           go install github.com/crazy-max/xgo@v0.37.0
-          sudo apt install upx
 
       - name: Build
         run: |
-          bash build.sh release ${{ matrix.build-type == 'lite' && 'lite' || '' }} ${{ matrix.target-platform }}
+          bash build.sh release ${{ matrix.build-type == 'lite' && 'lite' || '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FRONTEND_REPO: ${{ vars.FRONTEND_REPO }}
