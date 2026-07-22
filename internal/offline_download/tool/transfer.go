@@ -257,43 +257,6 @@ func removeStdTemp(t *TransferTask) {
 	}
 }
 
-func transferObj(ctx context.Context, tempDir, dstDirPath string, deletePolicy DeletePolicy) error {
-	srcStorage, srcObjActualPath, err := op.GetStorageAndActualPath(tempDir)
-	if err != nil {
-		return errors.WithMessage(err, "failed get src storage")
-	}
-	dstStorage, dstDirActualPath, err := op.GetStorageAndActualPath(dstDirPath)
-	if err != nil {
-		return errors.WithMessage(err, "failed get dst storage")
-	}
-	objs, err := op.List(ctx, srcStorage, srcObjActualPath, model.ListArgs{})
-	if err != nil {
-		return errors.WithMessagef(err, "failed list src [%s] objs", tempDir)
-	}
-	taskCreator, _ := ctx.Value(conf.UserKey).(*model.User) // taskCreator is nil when convert failed
-	for _, obj := range objs {
-		t := &TransferTask{
-			TaskData: fs.TaskData{
-				TaskExtension: task.TaskExtension{
-					Creator: taskCreator,
-					ApiUrl:  common.GetApiUrl(ctx),
-				},
-				SrcActualPath: stdpath.Join(srcObjActualPath, obj.GetName()),
-				DstActualPath: dstDirActualPath,
-				SrcStorage:    srcStorage,
-				DstStorage:    dstStorage,
-				SrcStorageMp:  srcStorage.GetStorage().MountPath,
-				DstStorageMp:  dstStorage.GetStorage().MountPath,
-			},
-			DeletePolicy: deletePolicy,
-		}
-		t.groupID = path.Join(t.DstStorageMp, t.DstActualPath)
-		task_group.TransferCoordinator.AddTask(t.groupID, nil)
-		TransferTaskManager.Add(t)
-	}
-	return nil
-}
-
 func transferObjPath(t *TransferTask) error {
 	t.Status = "getting src object"
 	srcObj, err := op.Get(t.Ctx(), t.SrcStorage, t.SrcActualPath)

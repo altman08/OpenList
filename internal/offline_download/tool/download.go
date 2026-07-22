@@ -86,33 +86,6 @@ outer:
 	if err != nil {
 		return err
 	}
-	if t.tool.Name() == "Pikpak" {
-		return nil
-	}
-	if t.tool.Name() == "Thunder" {
-		return nil
-	}
-	if t.tool.Name() == "ThunderBrowser" {
-		return nil
-	}
-	if t.tool.Name() == "ThunderX" {
-		return nil
-	}
-	if t.tool.Name() == "115 Cloud" {
-		// hack for 115
-		<-time.After(time.Second * 1)
-		err := t.tool.Remove(t)
-		if err != nil {
-			log.Errorln(err.Error())
-		}
-		return nil
-	}
-	if t.tool.Name() == "115 Open" {
-		return nil
-	}
-	if t.tool.Name() == "123 Open" {
-		return nil
-	}
 	t.Status = "offline download completed, maybe transferring"
 	// hack for qBittorrent
 	if t.tool.Name() == "qBittorrent" {
@@ -175,14 +148,6 @@ func (t *DownloadTask) Update() (bool, error) {
 }
 
 func (t *DownloadTask) Transfer() error {
-	toolName := t.tool.Name()
-	if toolName == "115 Cloud" || toolName == "115 Open" || toolName == "123 Open" || toolName == "123Pan" || toolName == "PikPak" || toolName == "Thunder" || toolName == "ThunderX" || toolName == "ThunderBrowser" {
-		// 如果不是直接下载到目标路径，则进行转存
-		if t.TempDir != t.DstDirPath {
-			return transferObj(t.Ctx(), t.TempDir, t.DstDirPath, t.DeletePolicy)
-		}
-		return nil
-	}
 	if t.DeletePolicy == UploadDownloadStream {
 		dstStorage, dstDirActualPath, err := op.GetStorageAndActualPath(t.DstDirPath)
 		if err != nil {

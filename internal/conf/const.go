@@ -74,27 +74,6 @@ const (
 	TransmissionUri      = "transmission_uri"
 	TransmissionSeedtime = "transmission_seedtime"
 
-	// 115
-	Pan115TempDir = "115_temp_dir"
-
-	// 123
-	Pan123TempDir = "123_temp_dir"
-
-	// 115_open
-	Pan115OpenTempDir = "115_open_temp_dir"
-
-	// pikpak
-	PikPakTempDir = "pikpak_temp_dir"
-
-	// thunder
-	ThunderTempDir = "thunder_temp_dir"
-
-	// thunderx
-	ThunderXTempDir = "thunderx_temp_dir"
-
-	// thunder_browser
-	ThunderBrowserTempDir = "thunder_browser_temp_dir"
-
 	// single
 	Token         = "token"
 	IndexProgress = "index_progress"
@@ -135,10 +114,6 @@ const (
 	// qbittorrent
 	QbittorrentUrl      = "qbittorrent_url"
 	QbittorrentSeedtime = "qbittorrent_seedtime"
-
-	// 123 open offline download
-	Pan123OpenOfflineDownloadCallbackUrl = "123_open_callback_url"
-	Pan123OpenTempDir                    = "123_open_temp_dir"
 
 	// ftp
 	FTPPublicHost            = "ftp_public_host"
