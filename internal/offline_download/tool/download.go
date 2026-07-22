@@ -10,7 +10,6 @@ import (
 	"github.com/OpenListTeam/OpenList/v4/internal/fs"
 	"github.com/OpenListTeam/OpenList/v4/internal/model"
 	"github.com/OpenListTeam/OpenList/v4/internal/op"
-	"github.com/OpenListTeam/OpenList/v4/internal/setting"
 	"github.com/OpenListTeam/OpenList/v4/internal/task"
 	"github.com/OpenListTeam/OpenList/v4/internal/task_group"
 	"github.com/OpenListTeam/tache"
@@ -87,31 +86,6 @@ outer:
 		return err
 	}
 	t.Status = "offline download completed, maybe transferring"
-	// hack for qBittorrent
-	if t.tool.Name() == "qBittorrent" {
-		seedTime := setting.GetInt(conf.QbittorrentSeedtime, 0)
-		if seedTime >= 0 {
-			t.Status = "offline download completed, waiting for seeding"
-			<-time.After(time.Minute * time.Duration(seedTime))
-			err := t.tool.Remove(t)
-			if err != nil {
-				log.Errorln(err.Error())
-			}
-		}
-	}
-
-	if t.tool.Name() == "Transmission" {
-		// hack for transmission
-		seedTime := setting.GetInt(conf.TransmissionSeedtime, 0)
-		if seedTime >= 0 {
-			t.Status = "offline download completed, waiting for seeding"
-			<-time.After(time.Minute * time.Duration(seedTime))
-			err := t.tool.Remove(t)
-			if err != nil {
-				log.Errorln(err.Error())
-			}
-		}
-	}
 	return nil
 }
 

@@ -66,14 +66,6 @@ const (
 	IgnorePaths     = "ignore_paths"
 	MaxIndexDepth   = "max_index_depth"
 
-	// aria2
-	Aria2Uri    = "aria2_uri"
-	Aria2Secret = "aria2_secret"
-
-	// transmission
-	TransmissionUri      = "transmission_uri"
-	TransmissionSeedtime = "transmission_seedtime"
-
 	// single
 	Token         = "token"
 	IndexProgress = "index_progress"
@@ -110,10 +102,6 @@ const (
 	S3Buckets         = "s3_buckets"
 	S3AccessKeyId     = "s3_access_key_id"
 	S3SecretAccessKey = "s3_secret_access_key"
-
-	// qbittorrent
-	QbittorrentUrl      = "qbittorrent_url"
-	QbittorrentSeedtime = "qbittorrent_seedtime"
 
 	// ftp
 	FTPPublicHost            = "ftp_public_host"

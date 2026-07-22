@@ -156,9 +156,6 @@ func admin(g *gin.RouterGroup) {
 	setting.POST("/delete", handles.DeleteSetting)
 	setting.POST("/default", handles.DefaultSettings)
 	setting.POST("/reset_token", handles.ResetToken)
-	setting.POST("/set_aria2", handles.SetAria2)
-	setting.POST("/set_qbit", handles.SetQbittorrent)
-	setting.POST("/set_transmission", handles.SetTransmission)
 
 	// retain /admin/task API to ensure compatibility with legacy automation scripts
 	_task(g.Group("/task"))
@@ -205,15 +202,11 @@ func _fs(g *gin.RouterGroup) {
 	g.PUT("/put", middlewares.FsUp, uploadLimiter, handles.FsStream)
 	g.PUT("/form", middlewares.FsUp, uploadLimiter, handles.FsForm)
 	g.POST("/link", middlewares.AuthAdmin, handles.Link)
-	// g.POST("/add_aria2", handles.AddOfflineDownload)
-	// g.POST("/add_qbit", handles.AddQbittorrent)
-	// g.POST("/add_transmission", handles.SetTransmission)
 	g.POST("/add_offline_download", handles.AddOfflineDownload)
 	g.POST("/archive/decompress", handles.FsArchiveDecompress)
 	// Torrent 相关接口
 	g.POST("/torrent/parse", handles.ParseTorrent)
 	g.POST("/torrent/upload_parse", handles.UploadTorrentAndParse)
-	g.POST("/torrent/rapid_upload", handles.TorrentRapidUpload)
 	g.POST("/torrent/generate", handles.GenerateTorrentForPath)
 	// Direct upload (client-side upload to storage)
 	g.POST("/get_direct_upload_info", middlewares.FsUp, handles.FsGetDirectUploadInfo)
