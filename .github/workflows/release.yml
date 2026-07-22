@@ -58,8 +58,12 @@ jobs:
         if: matrix.target-platform == ''
         run: |
           sudo snap install zig --classic --beta
-          docker pull crazymax/xgo:latest
-          go install github.com/crazy-max/xgo@latest
+          # Pin xgo image to the digest used on 2026-04-30 to avoid glibc version
+          # drift from the upstream ":latest" tag being rebuilt with newer glibc.
+          docker pull ghcr.io/crazy-max/xgo@sha256:9897d31ff8051296e267b582ab168c903f5bcade8a5bad4879e6e16071d67500
+          docker tag ghcr.io/crazy-max/xgo@sha256:9897d31ff8051296e267b582ab168c903f5bcade8a5bad4879e6e16071d67500 ghcr.io/crazy-max/xgo:latest
+          docker tag ghcr.io/crazy-max/xgo@sha256:9897d31ff8051296e267b582ab168c903f5bcade8a5bad4879e6e16071d67500 crazymax/xgo:latest
+          go install github.com/crazy-max/xgo@v0.37.0
           sudo apt install upx
 
       - name: Build
